@@ -15,6 +15,31 @@ public static class Day1Solver
             Math.Abs(lhs - rhs);
     }
 
+    public static int Part2(string[] input)
+    {
+        var lines = Collect(input);
+        var lhs = CountInstance(lines[0].Order());
+        var rhs = CountInstance(lines[1].Order());
+
+        var sum = 0;
+
+        foreach (var (lhsValue, lhsCount) in lhs)
+        {
+            if (rhs.TryGetValue(lhsValue, out var rhsCount))
+            {
+                sum += (lhsValue * lhsCount * rhsCount);
+            }
+        }
+
+        return sum;
+    }
+
+    private static IReadOnlyDictionary<int, int> CountInstance(IEnumerable<int> list)
+    {
+        return list.GroupBy(x => x)
+            .ToDictionary(x=>x.Key, x=>x.Count());
+    }
+
     private static int[][] Collect(string[] input)
     {
         var items = new int[2][];
@@ -44,6 +69,6 @@ public static class Day1Solver
         }
 
         static string[] Split(string line) =>
-            line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            line.Split([' '], StringSplitOptions.RemoveEmptyEntries);
     }
 }
