@@ -1,4 +1,5 @@
 ﻿using AdventOfCode2024;
+using AdventOfCode2024.Solvers;
 
 namespace Tests;
 
@@ -16,9 +17,9 @@ public class Day1Tests
             "3   3"
         ];
 
-        var result = Day1Solver.Part1(exampleInput);
+        var (part1, _) = new Day1(exampleInput).Solve();
 
-        Assert.Equal(11, result);
+        Assert.Equal(11, part1);
     }
 
     [Fact]
@@ -33,8 +34,8 @@ public class Day1Tests
             "3   3"
         ];
 
-        var result = Day1Solver.Part2(exampleInput);
+        var (_, part2) = new Day1(exampleInput).Solve();
 
-        Assert.Equal(31, result);
+        Assert.Equal(31, part2);
     }
 }

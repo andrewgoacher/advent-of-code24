@@ -1,9 +1,23 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using AdventOfCode2024;
+using AdventOfCode2024.Solvers;
 
 Console.WriteLine("Hello, World!");
 
-Console.WriteLine("Day 1");
-var day1Input = await File.ReadAllLinesAsync("inputs/Day1.txt");
-Console.WriteLine($"Part 1: {Day1Solver.Part1(day1Input)}");
+var solvers = new List<Solver>()
+{
+    Day1.FromFile()
+};
+
+var latest = solvers[^1];
+
+Solve(latest);
+
+static void Solve(Solver solver)
+{
+    Console.WriteLine(solver.GetType().Name);
+    var (part1, part2) = solver.Solve();
+
+    Console.WriteLine($"Part 1: {part1}");
+    Console.WriteLine($"Part 2: {part2}");
+}
