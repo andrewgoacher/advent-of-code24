@@ -6,7 +6,8 @@ Console.WriteLine("Hello, World!");
 
 var solvers = new List<Solver>()
 {
-    Day1.FromFile()
+    Day1.FromFile(),
+    Day2.FromFile(),
 };
 
 var latest = solvers[^1];
