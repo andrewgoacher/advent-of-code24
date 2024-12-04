@@ -4,7 +4,7 @@ namespace Tests;
 
 public class Day4Tests
 {
-    private readonly string[] _inputs = new[]
+    private readonly string[] _part1Inputs = new[]
     {
         "MMMSXXMASM",
         "MSAMXMSMSA",
@@ -16,6 +16,20 @@ public class Day4Tests
         "SAXAMASAAA",
         "MAMMMXMMMM",
         "MXMXAXMASX",
+    };
+
+    private readonly string[] _part2Inputs = new[]
+    {
+        ".M.S......",
+        "..A..MSMS.",
+        ".M.S.MAA..",
+        "..A.ASMSM.",
+        ".M.S.M....",
+        "..........",
+        "S.S.S.S.S.",
+        ".A.A.A.A..",
+        "M.M.M.M.M.",
+        "..........",
     };
 
     [Fact]
@@ -137,7 +151,14 @@ public class Day4Tests
     [Fact]
     public void Part1_CollectsExpectedNumberOfValues()
     {
-        var (part1, _) = new Day4(_inputs).Solve();
+        var (part1, _) = new Day4(_part1Inputs).Solve();
         Assert.Equal(18, part1);
+    }
+
+    [Fact]
+    public void PArt2_CollectsExpectedNumberOfValues()
+    {
+        var (_, part2) = new Day4(_part2Inputs).Solve();
+        Assert.Equal(9, part2);
     }
 }

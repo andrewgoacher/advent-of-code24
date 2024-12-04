@@ -53,7 +53,46 @@ public class Day4 : Solver
 
     protected override int Part2()
     {
-        return 0;
+        int count = 0;
+        for (var i = 0; i < _grid.Length; i++)
+        {
+            var line = _grid[i];
+            for (var j = 0; j < line.Length; j++)
+            {
+                var currentChar = _grid[i][j];
+                if (currentChar == 'A' && IsXMas(i, j, _grid))
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private static bool IsXMas(int x, int y, char[][] grid)
+    {
+        if (x - 1 < 0 || y - 1 < 0)
+        {
+            return false;
+        }
+
+        if (x + 1 >= grid.Length || y + 1 >= grid[x].Length)
+        {
+            return false;
+        }
+
+        char tl = grid[x - 1][y - 1];
+        char tr = grid[x - 1][y + 1];
+        char bl = grid[x + 1][y - 1];
+        char br = grid[x + 1][y + 1];
+
+        if ((tl == 'M' && br == 'S') || (tl == 'S' && br == 'M'))
+        {
+            return (bl == 'S' && tr == 'M') || (bl == 'M' && tr == 'S');
+        }
+
+        return false;
     }
 
     private static bool TopLeftBottomRightDiagonal(ArraySegment<char> targetChars, char[][] grid, int x, int y)
@@ -66,7 +105,6 @@ public class Day4 : Solver
         if (x >= grid.Length)
         {
             return false;
-
         }
 
         if (y >= grid[x].Length)
@@ -92,10 +130,9 @@ public class Day4 : Solver
             return true;
         }
 
-        if (x <0)
+        if (x < 0)
         {
             return false;
-
         }
 
         if (y >= grid[x].Length)
@@ -124,7 +161,6 @@ public class Day4 : Solver
         if (x >= grid.Length)
         {
             return false;
-
         }
 
         if (y < 0)
@@ -173,7 +209,6 @@ public class Day4 : Solver
         if (y >= grid[x].Length)
         {
             return false;
-
         }
 
         var current = targetChars[0];
