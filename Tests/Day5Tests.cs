@@ -62,4 +62,12 @@ public class Day5Tests
 
         Assert.Equal(143, part1);
     }
+
+    [Fact]
+    public void Day5_Part2_Example()
+    {
+        var (_, part2) = new Day5(_exampleInput).Solve();
+
+        Assert.Equal(123, part2);
+    }
 }

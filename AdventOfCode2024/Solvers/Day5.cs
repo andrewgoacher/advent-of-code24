@@ -5,6 +5,7 @@ public class Day5 : Solver
     private readonly Dictionary<int, List<int>> _replacements = new();
 
     private int[][] _rows = null!;
+
     public Day5(string[] input) : base(input)
     {
     }
@@ -20,7 +21,7 @@ public class Day5 : Solver
             var line = inputs[i];
             if (line.Contains('|'))
             {
-                var values = line.Split(new [] { '|'}, StringSplitOptions.RemoveEmptyEntries);
+                var values = line.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
                 var lhs = int.Parse(values[0]);
                 var rhs = int.Parse(values[1]);
                 if (_replacements.TryGetValue(rhs, out var replacements))
@@ -39,6 +40,7 @@ public class Day5 : Solver
             {
                 continue;
             }
+
             var row = line.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse)
                 .ToArray();
@@ -57,7 +59,60 @@ public class Day5 : Solver
 
     protected override int Part2()
     {
-        return 0;
+        return _rows
+            .Where(IsNotInCorrectOrder)
+            .Select(Reorder)
+            .Select(GetMidPoint).Sum();
+    }
+
+    private int[] Reorder(int[] row)
+    {
+        LinkedList<int> linkedList = new(row);
+
+        foreach (var item in row)
+        {
+            if (!_replacements.TryGetValue(item, out var replacements))
+            {
+                continue;
+            }
+
+            var replacementIndexes = replacements.Where(x => row.Contains(x));
+            if (!replacementIndexes.Any())
+            {
+                continue;
+            }
+            var last = Last(row, replacementIndexes);
+            var currentNode = linkedList.Find(item);
+            var theNode = linkedList.Find(last);
+            linkedList.Remove(currentNode!);
+            linkedList.AddAfter(theNode!, currentNode!);
+
+        }
+
+        return linkedList.ToArray();
+    }
+
+    private static int Last(int[] collection, IEnumerable<int> elements)
+    {
+        int index = -1;
+        foreach (var elem in elements)
+        {
+            for (var i = 0; i < collection.Length; i++)
+            {
+                var item = collection[i];
+                if (item == elem && index < i)
+                {
+                    index = i;
+                }
+            }
+        }
+
+        return collection[index];
+    }
+
+    private bool IsNotInCorrectOrder(int[] row)
+    {
+        return !IsInCorrectOrder(row);
     }
 
     private bool IsInCorrectOrder(int[] row)
@@ -86,6 +141,6 @@ public class Day5 : Solver
             len += 1;
         }
 
-        return row[(len / 2)-1];
+        return row[(len / 2) - 1];
     }
 }
