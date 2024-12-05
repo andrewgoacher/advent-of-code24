@@ -9,7 +9,8 @@ var solvers = new List<Solver>()
     Day1.FromFile(),
     Day2.FromFile(),
     Day3.FromFile(),
-    Day4.FromFile()
+    Day4.FromFile(),
+    Day5.FromFile()
 };
 
 var latest = solvers[^1];
