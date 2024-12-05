@@ -65,6 +65,10 @@ public class Day5 : Solver
 
     private int[] Reorder(int[] collection)
     {
+        if (IsInCorrectOrder(collection))
+        {
+            return collection;
+        }
         LinkedList<int> linkedList = new(collection);
         var arr = linkedList.ToArray();
 
@@ -102,7 +106,7 @@ public class Day5 : Solver
             arr = linkedList.ToArray();
         }
 
-        return arr;
+        return Reorder(arr);
     }
     private bool IsNotInCorrectOrder(int[] row)
     {
