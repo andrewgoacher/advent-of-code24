@@ -1,9 +1,14 @@
-﻿namespace AdventOfCode2024.Solvers;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace AdventOfCode2024.Solvers;
+
+[SuppressMessage("Major Code Smell", "S125:Sections of code should not be commented out")]
+[SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Local")]
+[SuppressMessage("Minor Code Smell", "S2325:Methods and properties that don\'t access instance data should be static")]
 public class Day5 : Solver
 {
-    private readonly Dictionary<int, List<int>> _replacements = new();
 
+    private readonly List<(int, int)> _beforeAfter = new();
     private int[][] _rows = null!;
 
     public Day5(string[] input) : base(input)
@@ -24,14 +29,7 @@ public class Day5 : Solver
                 var values = line.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
                 var lhs = int.Parse(values[0]);
                 var rhs = int.Parse(values[1]);
-                if (_replacements.TryGetValue(rhs, out var replacements))
-                {
-                    replacements.Add(lhs);
-                }
-                else
-                {
-                    _replacements.Add(rhs, new List<int> { lhs });
-                }
+                _beforeAfter.Add((lhs, rhs));
 
                 continue;
             }
@@ -65,51 +63,47 @@ public class Day5 : Solver
             .Select(GetMidPoint).Sum();
     }
 
-    private int[] Reorder(int[] row)
+    private int[] Reorder(int[] collection)
     {
-        LinkedList<int> linkedList = new(row);
+        LinkedList<int> linkedList = new(collection);
+        var arr = linkedList.ToArray();
 
-        foreach (var item in row)
+        for(var i = 0;i<arr.Length;++i)
         {
-            if (!_replacements.TryGetValue(item, out var replacements))
+            var item = arr[i];
+
+            var mustBeAfter = _beforeAfter.Where(x => x.Item1 == item)
+                .Select(x => x.Item2)
+                .Where(x => arr.Contains(x));
+
+            if (!mustBeAfter.Any())
             {
                 continue;
             }
 
-            var replacementIndexes = replacements.Where(x => row.Contains(x));
-            if (!replacementIndexes.Any())
-            {
-                continue;
-            }
-            var last = Last(row, replacementIndexes);
+            var earliestIndex = mustBeAfter.Select(x => IndexOf(linkedList.ToArray(), x)).OrderBy(x => x).First();
+            var earliestItem = arr[earliestIndex];
+
+            // if (!_replacements.TryGetValue(item, out var replacements))
+            // {
+            //     continue;
+            // }
+            //
+            // var replacementIndexes = replacements.Where(x => row.Contains(x));
+            // if (!replacementIndexes.Any())
+            // {
+            //     continue;
+            // }
+            // var last = Last(row, replacementIndexes);
             var currentNode = linkedList.Find(item);
-            var theNode = linkedList.Find(last);
+            var theNode = linkedList.Find(earliestItem);
             linkedList.Remove(currentNode!);
-            linkedList.AddAfter(theNode!, currentNode!);
-
+            linkedList.AddBefore(theNode!, currentNode!);
+            arr = linkedList.ToArray();
         }
 
-        return linkedList.ToArray();
+        return arr;
     }
-
-    private static int Last(int[] collection, IEnumerable<int> elements)
-    {
-        int index = -1;
-        foreach (var elem in elements)
-        {
-            for (var i = 0; i < collection.Length; i++)
-            {
-                var item = collection[i];
-                if (item == elem && index < i)
-                {
-                    index = i;
-                }
-            }
-        }
-
-        return collection[index];
-    }
-
     private bool IsNotInCorrectOrder(int[] row)
     {
         return !IsInCorrectOrder(row);
@@ -120,10 +114,17 @@ public class Day5 : Solver
         for (var i = 0; i < row.Length; ++i)
         {
             var item = row[i];
-            if (_replacements.TryGetValue(item, out var replacements))
+            var mustBeAfter = _beforeAfter.Where(x => x.Item1 == item)
+                .Select(x => x.Item2);
+
+            foreach (var a in mustBeAfter)
             {
-                var slice = row[i..];
-                if (replacements.Exists(x => slice.Contains(x)))
+                var idx = IndexOf(row, a);
+                if (idx == -1)
+                {
+                    continue;
+                }
+                if (i > idx)
                 {
                     return false;
                 }
@@ -131,6 +132,22 @@ public class Day5 : Solver
         }
 
         return true;
+    }
+
+    private static int IndexOf(int[] collection, int element)
+    {
+        int index = -1;
+
+        for (var i = 0; i < collection.Length; ++i)
+        {
+            var item = collection[i];
+            if (item == element)
+            {
+                index = i;
+            }
+        }
+
+        return index;
     }
 
     private static int GetMidPoint(int[] row)
