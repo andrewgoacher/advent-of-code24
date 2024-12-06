@@ -6,12 +6,14 @@ public class Guard : Node
     private Node? _currentNode;
     private readonly Vector _initialHeading;
     private readonly Vector _initialPosition;
+    private readonly Node _initialNode;
 
     public Guard(Vector position, Vector heading, Grid grid, Node current) : base(position, false, grid)
     {
         _initialHeading = heading;
         _initialPosition = position;
         _heading = heading;
+        _initialNode = current;
         _currentNode = current;
     }
 
@@ -22,6 +24,7 @@ public class Guard : Node
     {
         _heading = _initialHeading;
         Position = _initialPosition;
+        _currentNode = _initialNode;
     }
 
 #pragma warning disable S2368

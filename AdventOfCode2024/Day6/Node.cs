@@ -3,7 +3,7 @@
 public abstract class Node
 {
     public Vector Position { get; protected set; }
-    public bool IsVisitable { get; }
+    public bool IsVisitable { get; protected set; }
     public bool IsVisited { get; private set; }
 
     protected readonly Grid _grid;

@@ -1,9 +1,7 @@
 ﻿namespace AdventOfCode2024;
 
-public class Vector(int x, int y)
+public record Vector(int X, int Y)
 {
-    public int X { get; } = x;
-    public int Y { get; } = y;
     public Vector Add(int x, int y)
     {
         return new Vector(X + x, Y + y);

@@ -27,6 +27,29 @@ public class Day6 : Solver
 
     protected override int Part2()
     {
-        return 0;
+        _grid.Reset();
+        var nodes = _grid.VisitNodes().ToList();
+        var neighbours = nodes.Select(n => n.Node)
+            .Distinct()
+            .Select(x => x.GetNeighbours())
+            .SelectMany(x => x)
+            .Distinct()
+            .Where(n => n is VisitableNode)
+            .Cast<VisitableNode>()
+            .ToList();
+
+        var count = 0;
+
+        foreach (var neighbour in neighbours)
+        {
+            _grid.Reset();
+            neighbour.SetAsObstacle();
+            if (_grid.WillLoop())
+            {
+                count++;
+            }
+        }
+
+        return count;
     }
 }

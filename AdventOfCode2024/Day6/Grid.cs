@@ -17,6 +17,18 @@ public class Grid
         }
     }
 
+    public void Reset()
+    {
+        _guard.Reset();
+        for (var y = 0; y < _grid.Length; y++)
+        {
+            for (var x = 0; x < _grid[y].Length; x++)
+            {
+                GetNodeAt(x, y).Reset();
+            }
+        }
+    }
+
     public IEnumerable<VisitedNode> VisitNodes()
     {
         yield return new VisitedNode(_guard.CurrentNode!, _guard.Heading);
@@ -28,6 +40,43 @@ public class Grid
             {
                 yield return new VisitedNode(_guard.CurrentNode!, _guard.Heading);
             }
+        }
+    }
+
+    public bool WillLoop()
+    {
+        var visitedNodes = new Dictionary<Vector, List<Vector>>();
+        AddNode(new VisitedNode(_guard.CurrentNode!, _guard.Heading));
+        var canMove = true;
+        while (canMove)
+        {
+            canMove = _guard.Move();
+            if (canMove)
+            {
+                var visitedNode = new VisitedNode(_guard.CurrentNode!, _guard.Heading);
+                if (visitedNodes.TryGetValue(visitedNode.Node.Position, out var list)
+                    && list.Contains(visitedNode.Heading))
+                {
+                    return true;
+                }
+
+                AddNode(visitedNode);
+            }
+        }
+
+        return false;
+
+        void AddNode(VisitedNode node)
+        {
+            if (!visitedNodes.TryGetValue(node.Node.Position, out var list))
+            {
+                list = new List<Vector>() { node.Heading };
+
+                visitedNodes.Add(node.Node.Position, list);
+                return;
+            }
+
+            list.Add(node.Heading);
         }
     }
 

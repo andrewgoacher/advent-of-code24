@@ -6,5 +6,16 @@ public class VisitableNode : Node
     {
     }
 
+    public void SetAsObstacle()
+    {
+        IsVisitable = false;
+    }
+
+    public override void Reset()
+    {
+        IsVisitable = true;
+        base.Reset();
+    }
+
     public override char Print() => '.';
 }
