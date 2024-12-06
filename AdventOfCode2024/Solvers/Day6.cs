@@ -19,11 +19,10 @@ public class Day6 : Solver
 
     protected override int Part1()
     {
-        _grid.RunGrid();
-
-        return _grid
-            .GetVisitedNodes()
-            .Count(x => x.IsVisited);
+        return _grid.VisitNodes()
+            .Select(vn => vn.Node)
+            .Distinct()
+            .Count();
     }
 
     protected override int Part2()

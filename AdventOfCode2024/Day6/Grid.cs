@@ -4,7 +4,6 @@ public class Grid
 {
     private Guard _guard = null!;
     private readonly Node[][] _grid;
-    private readonly List<VisitedNode> _visitedNodes = new();
 
     public Grid(string[] inputs)
     {
@@ -13,32 +12,23 @@ public class Grid
         {
             _grid[i] = inputs[i]
                 .ToCharArray()
-                .Select((c,x) => ParseNode(c, x, i))
+                .Select((c, x) => ParseNode(c, x, i))
                 .ToArray();
         }
     }
 
-    public void RunGrid()
+    public IEnumerable<VisitedNode> VisitNodes()
     {
+        yield return new VisitedNode(_guard.CurrentNode!, _guard.Heading);
         bool canMove = true;
-        _visitedNodes.Add(new VisitedNode(_guard.CurrentNode!, _guard.Heading));
-
         while (canMove)
         {
             canMove = _guard.Move();
             if (canMove)
             {
-                _visitedNodes.Add(new VisitedNode(_guard.CurrentNode!, _guard.Heading));
+                yield return new VisitedNode(_guard.CurrentNode!, _guard.Heading);
             }
         }
-    }
-
-    public IEnumerable<VisitableNode> GetVisitedNodes()
-    {
-        return _grid.SelectMany(node => node)
-            .Where(node => node is VisitableNode)
-            .Cast<VisitableNode>()
-            .Where(node => node.IsVisited);
     }
 
     private Node ParseNode(char c, int x, int y)
@@ -65,10 +55,10 @@ public class Grid
             _ => throw new InvalidOperationException("Invalid char"),
         };
 
-        _guard = new Guard(new Vector(x, y), heading, this);
 
         var visitableNode = new VisitableNode(new Vector(x, y), this);
         visitableNode.Visit();
+        _guard = new Guard(new Vector(x, y), heading, this, visitableNode);
         return visitableNode;
     }
 

@@ -7,11 +7,12 @@ public class Guard : Node
     private readonly Vector _initialHeading;
     private readonly Vector _initialPosition;
 
-    public Guard(Vector position, Vector heading, Grid grid) : base(position, false, grid)
+    public Guard(Vector position, Vector heading, Grid grid, Node current) : base(position, false, grid)
     {
         _initialHeading = heading;
         _initialPosition = position;
         _heading = heading;
+        _currentNode = current;
     }
 
     public Vector Heading => _heading;
