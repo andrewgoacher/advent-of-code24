@@ -24,10 +24,10 @@ public class Guard : Node
     }
 
 #pragma warning disable S2368
-    public bool Move(Node[][] grid)
+    public bool Move()
 #pragma warning restore S2368
     {
-        var nextNode = GetNextNode(grid);
+        var nextNode = GetNextNode();
         _currentNode = nextNode;
         if (nextNode is null)
         {
@@ -39,21 +39,21 @@ public class Guard : Node
         return true;
     }
 
-    private Node? GetNextNode(Node[][] grid)
+    private Node? GetNextNode()
     {
         var nextPosition = Position.Add(_heading);
-        if (nextPosition.X < 0 || nextPosition.Y < 0 || nextPosition.Y >= grid.Length ||
-            nextPosition.X >= grid[nextPosition.Y].Length)
+        if (nextPosition.X < 0 || nextPosition.Y < 0 || nextPosition.Y >= _grid.Columns ||
+            nextPosition.X >= _grid.Rows)
         {
             // outside the bounds, so done moving
             return null;
         }
 
-        var nextNode = grid[nextPosition.Y][nextPosition.X];
+        var nextNode = _grid.GetNodeAt(nextPosition.X, nextPosition.Y);
         if (!nextNode.IsVisitable)
         {
             _heading = _heading.RotateRight();
-            return GetNextNode(grid);
+            return GetNextNode();
         }
 
         return nextNode;

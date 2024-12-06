@@ -6,7 +6,7 @@ public abstract class Node
     public bool IsVisitable { get; }
     public bool IsVisited { get; private set; }
 
-    private readonly Grid _grid;
+    protected readonly Grid _grid;
 
     protected Node(Vector position, bool isVisitable, Grid grid)
     {

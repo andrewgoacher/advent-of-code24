@@ -25,7 +25,7 @@ public class Grid
 
         while (canMove)
         {
-            canMove = _guard.Move(_grid);
+            canMove = _guard.Move();
             if (canMove)
             {
                 _visitedNodes.Add(new VisitedNode(_guard.CurrentNode!, _guard.Heading));
