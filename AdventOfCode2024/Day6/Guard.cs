@@ -3,19 +3,32 @@
 public class Guard : Node
 {
     private Vector _heading;
+    private Node? _currentNode;
+    private readonly Vector _initialHeading;
+    private readonly Vector _initialPosition;
 
     public Guard(Vector position, Vector heading) : base(position, false)
     {
+        _initialHeading = heading;
+        _initialPosition = position;
         _heading = heading;
     }
 
     public Vector Heading => _heading;
+    public Node? CurrentNode => _currentNode;
+
+    public override void Reset()
+    {
+        _heading = _initialHeading;
+        Position = _initialPosition;
+    }
 
 #pragma warning disable S2368
     public bool Move(Node[][] grid)
 #pragma warning restore S2368
     {
         var nextNode = GetNextNode(grid);
+        _currentNode = nextNode;
         if (nextNode is null)
         {
             return false;

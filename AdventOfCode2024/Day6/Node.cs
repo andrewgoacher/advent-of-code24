@@ -23,4 +23,9 @@ public abstract class Node
     }
 
     public abstract char Print();
+
+    public virtual void Reset()
+    {
+        IsVisited = false;
+    }
 }

@@ -7,4 +7,9 @@ public class Obstacle : Node
     }
 
     public override char Print() => '#';
+
+    public override void Reset()
+    {
+        // do nothing
+    }
 }
