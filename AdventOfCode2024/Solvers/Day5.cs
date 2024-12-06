@@ -1,10 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
+﻿
 namespace AdventOfCode2024.Solvers;
 
-[SuppressMessage("Major Code Smell", "S125:Sections of code should not be commented out")]
-[SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Local")]
-[SuppressMessage("Minor Code Smell", "S2325:Methods and properties that don\'t access instance data should be static")]
 public class Day5 : Solver
 {
 
@@ -88,17 +84,6 @@ public class Day5 : Solver
             var earliestIndex = mustBeAfter.Select(x => IndexOf(linkedList.ToArray(), x)).OrderBy(x => x).First();
             var earliestItem = arr[earliestIndex];
 
-            // if (!_replacements.TryGetValue(item, out var replacements))
-            // {
-            //     continue;
-            // }
-            //
-            // var replacementIndexes = replacements.Where(x => row.Contains(x));
-            // if (!replacementIndexes.Any())
-            // {
-            //     continue;
-            // }
-            // var last = Last(row, replacementIndexes);
             var currentNode = linkedList.Find(item);
             var theNode = linkedList.Find(earliestItem);
             linkedList.Remove(currentNode!);
