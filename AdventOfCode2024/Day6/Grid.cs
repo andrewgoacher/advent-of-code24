@@ -47,8 +47,8 @@ public class Grid
 
         return c switch
         {
-            '.' => new VisitableNode(new Vector(x, y)),
-            '#' => new Obstacle(new Vector(x, y)),
+            '.' => new VisitableNode(new Vector(x, y), this),
+            '#' => new Obstacle(new Vector(x, y), this),
             var g when validGuardChars.Contains(g) => CreateGuardNode(x, y, c),
             _ => throw new InvalidOperationException("Invalid char"),
         };
@@ -65,10 +65,18 @@ public class Grid
             _ => throw new InvalidOperationException("Invalid char"),
         };
 
-        _guard = new Guard(new Vector(x, y), heading);
+        _guard = new Guard(new Vector(x, y), heading, this);
 
-        var visitableNode = new VisitableNode(new Vector(x, y));
+        var visitableNode = new VisitableNode(new Vector(x, y), this);
         visitableNode.Visit();
         return visitableNode;
+    }
+
+    public int Columns => _grid[0].Length;
+    public int Rows => _grid.Length;
+
+    public Node GetNodeAt(int x, int y)
+    {
+        return _grid[y][x];
     }
 }

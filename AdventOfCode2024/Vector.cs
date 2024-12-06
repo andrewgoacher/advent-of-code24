@@ -22,4 +22,10 @@ public class Vector(int x, int y)
             _ => throw new InvalidOperationException("Not a valid direction")
         };
     }
+
+    public void Deconstruct(out int x, out int y)
+    {
+        x = X;
+        y = Y;
+    }
 }

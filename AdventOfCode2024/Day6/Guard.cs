@@ -7,7 +7,7 @@ public class Guard : Node
     private readonly Vector _initialHeading;
     private readonly Vector _initialPosition;
 
-    public Guard(Vector position, Vector heading) : base(position, false)
+    public Guard(Vector position, Vector heading, Grid grid) : base(position, false, grid)
     {
         _initialHeading = heading;
         _initialPosition = position;
@@ -42,8 +42,8 @@ public class Guard : Node
     private Node? GetNextNode(Node[][] grid)
     {
         var nextPosition = Position.Add(_heading);
-        if (nextPosition.X < 0 || nextPosition.Y < 0 || nextPosition.X >= grid.Length ||
-            nextPosition.Y >= grid[nextPosition.X].Length)
+        if (nextPosition.X < 0 || nextPosition.Y < 0 || nextPosition.Y >= grid.Length ||
+            nextPosition.X >= grid[nextPosition.Y].Length)
         {
             // outside the bounds, so done moving
             return null;

@@ -2,7 +2,7 @@
 
 public class Obstacle : Node
 {
-    public Obstacle(Vector position) : base(position, false)
+    public Obstacle(Vector position, Grid grid) : base(position, false, grid)
     {
     }
 

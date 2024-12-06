@@ -2,7 +2,7 @@
 
 public class VisitableNode : Node
 {
-    public VisitableNode(Vector position) : base(position, true)
+    public VisitableNode(Vector position, Grid grid) : base(position, true, grid)
     {
     }
 
