@@ -37,9 +37,18 @@ public class Day7Tests
         Assert.Equal(3749, part1);
     }
 
+    [Fact]
+    public void Part2_GivesExpectedOutput()
+    {
+        var (_, part2) = new Day7(_inputs).Solve();
+
+        Assert.Equal(11387, part2);
+    }
+
     [Theory]
     [InlineData(Operator.Mul, 10, 12, 120)]
     [InlineData(Operator.Add, 12, 13, 25)]
+    [InlineData(Operator.Combine, 12, 13, 1213)]
     public void Expression_2PartsWithOperator_GivesExpectedResult(Operator op, long lhs, long rhs, long expected)
     {
         var operators = new Operator[] { op };
