@@ -30,7 +30,14 @@ public class Expression
         {
             Operator.Add => (a, b) => a + b,
             Operator.Mul => (a, b) => a * b,
+            Operator.Combine => Combine,
             _ => throw new InvalidOperationException("Operator undefined.")
         };
+    }
+
+    private static long Combine(long a, long b)
+    {
+        // I feel disgusting doing this but I want to go to bed
+        return Convert.ToInt64($"{a}{b}");
     }
 }
