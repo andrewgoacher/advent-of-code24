@@ -22,7 +22,7 @@ public class Day4 : Solver
         }
     }
 
-    protected override int Part1()
+    protected override long Part1()
     {
         char[] targetWord = { 'X', 'M', 'A', 'S' };
         int count = 0;
@@ -51,7 +51,7 @@ public class Day4 : Solver
         return count;
     }
 
-    protected override int Part2()
+    protected override long Part2()
     {
         int count = 0;
         for (var i = 0; i < _grid.Length; i++)

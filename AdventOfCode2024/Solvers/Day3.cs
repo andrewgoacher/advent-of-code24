@@ -16,12 +16,12 @@ public class Day3 : Solver
         _tokens = Tokeniser.Tokenise(inputs[0]);
     }
 
-    protected override int Part1()
+    protected override long Part1()
     {
         return GetMulTokens().Select(token => token.Execute()).Sum();
     }
 
-    protected override int Part2()
+    protected override long Part2()
     {
         return _tokens.Select(token => token.Execute()).Sum();
     }

@@ -42,7 +42,7 @@ public class Day1 : Solver
         static string[] Split(string line) => line.Split([' '], StringSplitOptions.RemoveEmptyEntries);
     }
 
-    protected override int Part1()
+    protected override long Part1()
     {
         return _lhs.Zip(_rhs, AbsoluteDisatance)
             .Sum();
@@ -50,7 +50,7 @@ public class Day1 : Solver
         static int AbsoluteDisatance(int lhs, int rhs) => Math.Abs(lhs - rhs);
     }
 
-    protected override int Part2()
+    protected override long Part2()
     {
         var lhs = CountInstance(_lhs);
         var rhs = CountInstance(_rhs);

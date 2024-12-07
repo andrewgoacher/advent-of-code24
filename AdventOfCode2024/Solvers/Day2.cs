@@ -25,13 +25,13 @@ public class Day2 : Solver
         }
     }
 
-    protected override int Part1()
+    protected override long Part1()
     {
         return _reports
             .Count(report => IsIncreasing(report) || IsDecreasing(report));
     }
 
-    protected override int Part2()
+    protected override long Part2()
     {
         return _reports
             .Count(report => IsIncreasing(report, true) || IsDecreasing(report, true));

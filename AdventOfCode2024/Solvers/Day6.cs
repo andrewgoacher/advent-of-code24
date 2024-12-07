@@ -17,7 +17,7 @@ public class Day6 : Solver
         _grid = new Grid(inputs);
     }
 
-    protected override int Part1()
+    protected override long Part1()
     {
         return _grid.VisitNodes()
             .Select(vn => vn.Node)
@@ -25,7 +25,7 @@ public class Day6 : Solver
             .Count();
     }
 
-    protected override int Part2()
+    protected override long Part2()
     {
         _grid.Reset();
         var nodes = _grid.VisitNodes().ToList();

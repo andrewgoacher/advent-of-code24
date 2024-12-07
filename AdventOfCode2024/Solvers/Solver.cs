@@ -8,7 +8,7 @@ public abstract class Solver
         _input = input;
     }
 
-    public (int, int) Solve()
+    public (long, long) Solve()
     {
         OnPrepare(_input);
 
@@ -22,6 +22,6 @@ public abstract class Solver
     {
     }
 
-    protected abstract int Part1();
-    protected abstract int Part2();
+    protected abstract long Part1();
+    protected abstract long Part2();
 }

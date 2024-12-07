@@ -4,19 +4,20 @@ using AdventOfCode2024.Solvers;
 
 Console.WriteLine("Hello, World!");
 
-var solvers = new List<Solver>()
+var solvers = new List<Func<Solver>>()
 {
-    Day1.FromFile(),
-    Day2.FromFile(),
-    Day3.FromFile(),
-    Day4.FromFile(),
-    Day5.FromFile(),
-    Day6.FromFile()
+    Day1.FromFile,
+    Day2.FromFile,
+    Day3.FromFile,
+    Day4.FromFile,
+    Day5.FromFile,
+    Day6.FromFile,
+    Day7.FromFile,
 };
 
 var latest = solvers[^1];
 
-Solve(latest);
+Solve(latest());
 
 static void Solve(Solver solver)
 {

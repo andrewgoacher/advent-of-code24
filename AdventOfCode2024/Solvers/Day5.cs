@@ -44,14 +44,14 @@ public class Day5 : Solver
         _rows = rows.ToArray();
     }
 
-    protected override int Part1()
+    protected override long Part1()
     {
         return _rows
             .Where(IsInCorrectOrder)
             .Select(GetMidPoint).Sum();
     }
 
-    protected override int Part2()
+    protected override long Part2()
     {
         return _rows
             .Where(IsNotInCorrectOrder)
