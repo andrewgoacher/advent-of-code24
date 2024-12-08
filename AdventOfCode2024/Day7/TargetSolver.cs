@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AdventOfCode2024.Day7;
 
@@ -8,10 +9,14 @@ public class TargetSolver
     private readonly List<Expression> _expressionCandidates = new();
     private readonly List<Expression> _validExpressions = new();
 
-    public TargetSolver(long target, long[] inputs)
+    public TargetSolver(long target, long[] inputs, bool withCombinations = false)
     {
         _target = target;
-        _expressionCandidates.AddRange(GetValidExpressions(inputs));
+        var validExpressions = withCombinations ?
+            GetValidExpressionsEx(inputs, new [] { Operator.Add , Operator.Combine, Operator.Mul}) :
+            GetValidExpressionsEx(inputs, new [] { Operator.Add , Operator.Mul});
+
+        _expressionCandidates.AddRange(validExpressions);
     }
 
     public long Target => _target;
@@ -35,26 +40,47 @@ public class TargetSolver
         return _validExpressions.Any();
     }
 
-    private static IEnumerable<Expression> GetValidExpressions(long[] inputs)
+    private static IEnumerable<Expression> GetValidExpressionsEx(long[] inputs, Operator[] operatorsInUse)
     {
-        var operators = new[] { Operator.Add, Operator.Mul };
-        int len = inputs.Length;
-        int index = len - 1;
-        int numberOfPermutations = 1 << index;
-        int bitArrayLen = index;
-
-        for (var i = 0; i < numberOfPermutations; i++)
+        foreach (var operatorCombination in GetOperatorCombinations(inputs, operatorsInUse))
         {
-            var bits = new BitArray(new int[] { i });
+            yield return new Expression(inputs, operatorCombination);
+        }
+    }
 
-            var validOperators = bits.Cast<bool>()
-                .Take(bitArrayLen)
-                .Reverse()
-                .Select(b => b ? 1 : 0)
-                .Select(x => operators[x])
-                .ToArray();
+    private static IEnumerable<Operator[]> GetOperatorCombinations(long[] inputs, Operator[] operatorsInUse)
+    {
+        var numberOfOperatorsNeeded = inputs.Length - 1;
 
-            yield return new Expression(inputs, validOperators);
+        var operatorMasterList = new List<List<Operator>>();
+        foreach (var operatorX in operatorsInUse)
+        {
+            operatorMasterList.Add(new List<Operator> { operatorX });
+        }
+
+        numberOfOperatorsNeeded--;
+
+        while (numberOfOperatorsNeeded > 0)
+        {
+            var newList = new List<List<Operator>>();
+            for(var i = 0;i<operatorMasterList.Count;++i)
+            {
+                var list = operatorMasterList[i];
+                foreach (var operatorX in operatorsInUse)
+                {
+                    var list2 = new List<Operator>(list);
+                    list2.Add(operatorX);
+                    newList.Add(list2);
+                }
+            }
+            operatorMasterList = newList;
+
+            numberOfOperatorsNeeded--;
+        }
+
+        foreach (var list in operatorMasterList)
+        {
+            yield return list.ToArray();
         }
     }
 }

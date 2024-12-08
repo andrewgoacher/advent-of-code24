@@ -11,6 +11,8 @@ public class Expression
         _operators = operators;
     }
 
+    public Operator[] Operators => _operators;
+
     public long Solve()
     {
         long current = _inputs[0];
