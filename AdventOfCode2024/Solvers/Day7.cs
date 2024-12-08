@@ -36,6 +36,9 @@ public class Day7 : Solver
 
     protected override long Part2()
     {
-        return 0;
+        return _inputs.Select(input => new TargetSolver(input.Item1, input.Item2, true))
+            .Where(solver => solver.IsSolvable())
+            .Select(solver => solver.Target)
+            .Sum();
     }
 }
