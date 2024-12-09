@@ -13,6 +13,7 @@ var solvers = new List<Func<Solver>>()
     Day5.FromFile,
     Day6.FromFile,
     Day7.FromFile,
+    Day8.FromFile,
 };
 
 var latest = solvers[^1];

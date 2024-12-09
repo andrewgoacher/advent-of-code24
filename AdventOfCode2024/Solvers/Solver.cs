@@ -8,6 +8,8 @@ public abstract class Solver
         _input = input;
     }
 
+    protected string[] Input => _input;
+
     public (long, long) Solve()
     {
         OnPrepare(_input);
