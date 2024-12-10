@@ -27,4 +27,12 @@ public class Day8Tests
 
         Assert.Equal(14, part1);
     }
+
+    [Fact]
+    public void Part2_ExpectedOutput()
+    {
+        var (_, part2) = new Day8(_inputs).Solve();
+
+        Assert.Equal(34, part2);
+    }
 }
