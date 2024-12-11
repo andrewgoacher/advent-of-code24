@@ -14,6 +14,7 @@ var solvers = new List<Func<Solver>>()
     Day6.FromFile,
     Day7.FromFile,
     Day8.FromFile,
+    Day9.FromFile
 };
 
 var latest = solvers[^1];
