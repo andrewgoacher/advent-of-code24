@@ -13,4 +13,12 @@ public class Day9Tests
 
         Assert.Equal(1928, part1);
     }
+
+    [Fact]
+    public void Part2_GivesExpectedResult()
+    {
+        var (_, part2) = new Day9(new[] { _input }).Solve();
+
+        Assert.Equal(2858, part2);
+    }
 }

@@ -1,8 +1,11 @@
-﻿namespace AdventOfCode2024.Solvers;
+﻿using System.Diagnostics;
+
+namespace AdventOfCode2024.Solvers;
 
 public class Day9 : Solver
 {
     private int?[] _uncompressed = null!;
+    private Block[] _blocks = null!;
 
     public Day9(string[] input) : base(input)
     {
@@ -17,6 +20,8 @@ public class Day9 : Solver
             .Select(x => x.ToString())
             .Select(int.Parse).ToArray();
 
+        var blocks = new List<Block>();
+
         var currentIndex = 0;
         for (var i = 0; i < rawData.Length; i += 2)
         {
@@ -26,6 +31,8 @@ public class Day9 : Solver
             {
                 uncompressedInputs.Add(currentIndex);
             }
+
+            blocks.Add(new Block() { Id = currentIndex, Length = numberOfBlocks });
 
             currentIndex += 1;
 
@@ -39,9 +46,15 @@ public class Day9 : Solver
             {
                 uncompressedInputs.Add(null);
             }
+
+            if (numberOfFreeSpaces > 0)
+            {
+                blocks.Add(new Block() { Id = null, Length = numberOfFreeSpaces });
+            }
         }
 
         _uncompressed = uncompressedInputs.ToArray();
+        _blocks = blocks.ToArray();
     }
 
     private int[] Defragment()
@@ -86,6 +99,74 @@ public class Day9 : Solver
         return array.Where(x => x is not null).Cast<int>().ToArray();
     }
 
+    private int?[] FullyDefragment()
+    {
+        var endIndex = _blocks.Length - 1;
+
+        var defragging = true;
+        var array = new Block[_blocks.Length];
+        _blocks.CopyTo(array, 0);
+
+        while (defragging)
+        {
+            defragging = array.Any(a => !a.Touched);
+            if (!defragging)
+            {
+                break;
+            }
+
+            var blockToMove = array[endIndex];
+            if (blockToMove.Touched)
+            {
+                endIndex -= 1;
+                continue;
+            }
+
+            blockToMove.Touched = true;
+            if (blockToMove.Id is null)
+            {
+                endIndex -= 1;
+                continue;
+            }
+
+            for (var i = 0; i < endIndex; i++)
+            {
+                var block = array[i];
+                if (block.Id is not null)
+                {
+                    continue;
+                }
+                if (block.Length >= blockToMove.Length)
+                {
+                    if (block.Touched)
+                    {
+                        continue;
+                    }
+                    block.Touched = true;
+                    array[i] = blockToMove;
+                    array[endIndex] = block;
+                    endIndex -= 1;
+                    break;
+                }
+            }
+        }
+
+        var intArray = new int?[array.Sum(x => x.Length)];
+
+        int counter = 0;
+        for (var i = 0; i < array.Length; i++)
+        {
+            var block = array[i];
+            for (var j = 0; j < block.Length; j++)
+            {
+                intArray[counter++] = block.Id;
+            }
+        }
+        //00...111...2...333.44.5555.6666.777.888899
+// 00992111777.44.333....5555.6666.....8888..
+        return intArray;
+    }
+
     private static long Checksum(int[] inputs)
     {
         long result = 0;
@@ -94,6 +175,24 @@ public class Day9 : Solver
         {
             var value = i * inputs[i];
             result += value;
+        }
+
+        return result;
+    }
+
+    private static long Checksum(int?[] inputs)
+    {
+        long result = 0;
+
+        for (var i = 0; i < inputs.Length; i++)
+        {
+            var value = i * inputs[i];
+            if (value is null)
+            {
+                continue;
+            }
+
+            result += value.Value;
         }
 
         return result;
@@ -108,6 +207,28 @@ public class Day9 : Solver
 
     protected override long Part2()
     {
-        return 0;
+        var defrag = FullyDefragment();
+        var checksum = Checksum(defrag);
+        return checksum;
+    }
+
+    [DebuggerDisplay("{ToString()}")]
+    class Block
+    {
+        public int? Id { get; set; }
+        public int Length { get; set; }
+
+        public bool Touched { get; set; } = false;
+
+        public override string ToString()
+        {
+            if (Id == null)
+            {
+                return new string('.', Length);
+            }
+
+            char x = Id.Value.ToString()[0];
+            return new string(x, Length);
+        }
     }
 }
