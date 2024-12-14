@@ -24,6 +24,18 @@ public abstract class Solver
     {
     }
 
+    protected void Print(string print, bool append = false)
+    {
+        var user = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        var path = Path.Combine(user, "Downloads", $"{this.GetType().Name}.txt");
+        if (File.Exists(path) && !append)
+        {
+            File.Delete(path);
+        }
+
+        File.AppendAllText(path, print);
+    }
+
     protected abstract long Part1();
     protected abstract long Part2();
 }
